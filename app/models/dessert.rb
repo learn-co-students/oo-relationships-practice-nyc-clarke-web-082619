@@ -1,39 +1,24 @@
-class Dessert
+class Desserts
 
-    attr_reader :name, :bakery
-
+    attr_accessor :name, :bakery
     @@all = []
 
     def initialize(name, bakery)
-        @name = name
+        @ingredients = ingredients
         @bakery = bakery
         @@all << self
+    end
+
+    def ingredients
+        Ingredient.all.select{|ing| ing.dessert == self}
+    end
+
+    def cal_counts
+        ingredients.map{|ing| ing.calories}.reduce(&:+)
     end
 
     def self.all 
         @@all 
     end
 
-    def ingredients
-        # returns array of all ingredients
-        # in this dessert
-        Ingredient.all.select do |ingredient|
-            ingredient.dessert == self
-        end
-    end
-
-    def shopping_list
-        # returns array of names (strings)
-        # of all ingredients in this dessert
-        self.ingredients.map do |ingredient|
-            ingredient.name
-        end
-    end
-
-    def calorie_count
-        self.ingredients.map do |ingredient|
-            ingredient.calorie_count
-        end.sum
-
-    end
 end
